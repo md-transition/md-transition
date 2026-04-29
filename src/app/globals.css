@@ -1,0 +1,268 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Variables CSS ──────────────────────────── */
+@layer base {
+  :root {
+    --dark:   #143459;   /* bleu marine — base principale */
+    --accent: #F29430;   /* orange signature */
+    --cream:  #FFFDEE;   /* jaune clair fond de page */
+    --gray:   #737373;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    @apply bg-cream antialiased;
+    color: #737373;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Hiérarchie typographique — display font pour les titres */
+  h1, h2, h3 {
+    font-family: var(--font-display, var(--font-inter));
+    letter-spacing: -0.02em;
+  }
+
+  /* Scrollbar élégante */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #FFFDEE; }
+  ::-webkit-scrollbar-thumb { background: rgba(242,148,48,0.35); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(242,148,48,0.6); }
+
+  /* Focus WCAG-AA */
+  :focus-visible {
+    outline: 2px solid #F29430;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Sélection */
+  ::selection {
+    background-color: rgba(242, 148, 48, 0.15);
+    color: #143459;
+  }
+}
+
+/* ─── Composants ─────────────────────────────── */
+@layer components {
+
+  /*
+   * ── Boutons ────────────────────────────────────────────────────────
+   *  .btn-primary   → orange (CTA principal, fond sombre)
+   *  .btn-dark      → bleu marine (CTA sur fond clair)
+   *  .btn-secondary → outline bleu marine
+   *  .btn-ghost     → transparent blanc (fond sombre)
+   * ──────────────────────────────────────────────────────────────────
+   */
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-orange text-white font-bold rounded-xl
+           px-7 py-3.5 text-sm sm:text-base
+           shadow-orange-sm
+           hover:bg-orange-700 hover:shadow-orange hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-none
+           transition-all duration-200;
+  }
+
+  /* Bouton sombre — pour sections claires */
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2
+           bg-navy text-white font-bold rounded-xl
+           px-7 py-3.5 text-sm sm:text-base
+           shadow-navy-sm
+           hover:bg-navy-700 hover:shadow-navy hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-none
+           transition-all duration-200;
+  }
+
+  /* Compatibilité */
+  .btn-teal {
+    @apply btn-primary;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           border-2 border-navy text-navy font-semibold rounded-xl
+           px-7 py-3.5 text-sm sm:text-base
+           hover:bg-navy hover:text-white hover:-translate-y-0.5
+           transition-all duration-200;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2
+           bg-white/10 backdrop-blur-sm border border-white/25
+           text-white font-semibold rounded-xl
+           px-7 py-3.5 text-sm sm:text-base
+           hover:bg-white/20 hover:-translate-y-0.5
+           transition-all duration-200;
+  }
+
+  /* ── Layout ── */
+  .section-pd   { @apply py-20 lg:py-28; }
+  .container-xl { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+
+  /* ── Cartes ── */
+  .card {
+    @apply bg-white rounded-2xl shadow-card
+           transition-all duration-300
+           hover:shadow-card-hover hover:-translate-y-1;
+  }
+
+  .card-bordered {
+    @apply card border border-slate-100
+           hover:border-orange/25;
+  }
+
+  .card-dark {
+    @apply bg-gradient-navy rounded-2xl text-white
+           shadow-card overflow-hidden relative;
+  }
+
+  /* ── Typographie ── */
+
+  /* Surtitre — orange signature */
+  .section-eyebrow {
+    @apply inline-block text-orange font-semibold
+           text-xs sm:text-sm uppercase tracking-[0.14em];
+  }
+
+  /* Badge capsule */
+  .badge {
+    @apply inline-flex items-center gap-1.5
+           bg-orange/10 text-orange-700 border border-orange/20
+           px-4 py-1.5 rounded-full
+           text-xs sm:text-sm font-semibold;
+  }
+
+  .badge-orange {
+    @apply inline-flex items-center gap-1.5
+           bg-orange/15 text-orange border border-orange/25
+           px-4 py-1.5 rounded-full
+           text-xs sm:text-sm font-semibold;
+  }
+
+  .section-title {
+    @apply text-3xl sm:text-4xl lg:text-[2.65rem] font-bold
+           text-navy leading-[1.12] tracking-[-0.025em];
+    font-family: var(--font-display, var(--font-inter));
+  }
+
+  .section-subtitle {
+    @apply text-base sm:text-lg leading-relaxed;
+    color: #737373;
+  }
+
+  /* ── Patterns de fond ── */
+  .bg-dots {
+    background-image: radial-gradient(circle, rgba(20,52,89,0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .bg-dots-white {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .bg-dots-orange {
+    background-image: radial-gradient(circle, rgba(242,148,48,0.09) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Séparateur orange */
+  .orange-divider {
+    @apply w-12 h-[3px] bg-orange rounded-full;
+  }
+
+  /* Feature tag */
+  .feature-tag {
+    @apply inline-flex items-center gap-1.5
+           bg-orange/10 text-orange-800 border border-orange/15
+           px-3 py-1.5 rounded-full
+           text-xs font-semibold;
+  }
+
+  /* Icône ronde */
+  .icon-circle {
+    @apply w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0;
+  }
+}
+
+/* ─── Utilitaires ────────────────────────────── */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
+  .font-display { font-family: var(--font-display, var(--font-inter)); }
+
+  /* Dégradé de texte bleu → orange */
+  .gradient-text {
+    background: linear-gradient(135deg, #143459 0%, #F29430 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animation delays */
+  .delay-75  { animation-delay:  75ms; }
+  .delay-150 { animation-delay: 150ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-450 { animation-delay: 450ms; }
+  .delay-600 { animation-delay: 600ms; }
+
+  .hover-slide-x { @apply transition-transform duration-200 hover:translate-x-1; }
+}
+
+/* ─── Hero entrance animations — CSS pur, aucun JS requis ──── */
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-fade-left {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes hero-fade-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes hero-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes hero-scale-x {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.hero-fade-up    { animation: hero-fade-up    0.65s ease-out both; }
+.hero-fade-left  { animation: hero-fade-left  0.4s  ease-out both; }
+.hero-fade-right { animation: hero-fade-right 0.7s  ease-out both; }
+.hero-fade-in    { animation: hero-fade-in    0.5s  ease-out both; }
+.hero-scale-x    { animation: hero-scale-x   0.8s  ease-out both; transform-origin: left; }
+
+@keyframes connector-grow {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+@keyframes blob-scale {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.2); }
+}
+.animate-blob      { animation: blob-scale 5s ease-in-out infinite; }
+.animate-blob-slow { animation: blob-scale 6s ease-in-out 2s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade-up, .hero-fade-left, .hero-fade-right, .hero-fade-in, .hero-scale-x {
+    animation: none;
+  }
+}
+
+/* ─── Scroll animations (remplace framer-motion whileInView) ── */
+.will-animate {
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.will-animate[data-dir="up"]    { opacity: 0; transform: translateY(40px); }
+.will-animate[data-dir="left"]  { opacity: 0; transform: translateX(-40px); }
+.will-animate[data-dir="right"] { opacity: 0; transform: translateX(40px); }
+.will-animate[data-dir="none"]  { opacity: 0; }
+.will-animate.is-visible        { opacity: 1; transform: none; }

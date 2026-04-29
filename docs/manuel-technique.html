@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manuel Technique — MD Transition</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --navy:    #0C2038;
+      --navy2:   #143459;
+      --orange:  #F29430;
+      --orange2: #D97B18;
+      --gray:    #f8f9fa;
+      --text:    #374151;
+      --border:  #e5e7eb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      color: var(--text);
+      background: #fff;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* ── COVER PAGE ── */
+    .cover {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px 72px;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      background: rgba(242,148,48,0.08);
+      border-radius: 50%;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .cover-top { position: relative; z-index: 1; }
+    .cover-logo { display: block; height: 52px; width: auto; }
+    .cover-badge {
+      display: inline-block;
+      margin-top: 24px;
+      background: rgba(242,148,48,0.15);
+      border: 1px solid rgba(242,148,48,0.35);
+      color: var(--orange);
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .cover-center {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .cover-title {
+      color: #fff;
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+    .cover-title span { color: var(--orange); }
+    .cover-subtitle {
+      color: rgba(255,255,255,0.65);
+      font-size: 16px;
+      max-width: 520px;
+      line-height: 1.6;
+    }
+    .cover-meta {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .cover-author { color: rgba(255,255,255,0.55); font-size: 12px; }
+    .cover-author strong { display: block; color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .cover-date { color: rgba(255,255,255,0.4); font-size: 11px; text-align: right; }
+
+    /* ── TOC PAGE ── */
+    .toc-page {
+      padding: 60px 72px;
+      page-break-after: always;
+    }
+    .section-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      color: var(--orange);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .page-title-line {
+      width: 48px; height: 4px;
+      background: var(--orange);
+      border-radius: 2px;
+      margin-bottom: 40px;
+    }
+    .toc-list { list-style: none; }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--border);
+      gap: 12px;
+    }
+    .toc-num {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      color: var(--orange);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .toc-label { font-size: 13px; font-weight: 600; color: var(--navy); flex: 1; }
+    .toc-dots { flex: 1; border-bottom: 2px dotted var(--border); }
+    .toc-page-num { font-size: 12px; color: var(--orange); font-weight: 700; }
+
+    /* ── CONTENT PAGES ── */
+    .content-page {
+      padding: 56px 72px;
+      page-break-before: always;
+    }
+    h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 28px 0 10px;
+    }
+    h3::before {
+      content: '▶';
+      color: var(--orange);
+      margin-right: 8px;
+      font-size: 10px;
+    }
+    p { margin-bottom: 12px; font-size: 13px; color: var(--text); }
+    ul, ol { padding-left: 22px; margin-bottom: 14px; }
+    li { margin-bottom: 6px; font-size: 13px; }
+
+    /* Code blocks */
+    .code-block {
+      background: #1a2332;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 16px 0;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+    .code-block .line { display: block; }
+    .code-block .comment { color: #6b7280; }
+    .code-block .key { color: #93c5fd; }
+    .code-block .val { color: #86efac; }
+    .code-block .cmd { color: #fbbf24; }
+    .code-block .path { color: #c084fc; }
+    .code-block .plain { color: #e2e8f0; }
+
+    /* Info cards */
+    .card {
+      background: var(--gray);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 14px 0;
+      border-left: 4px solid var(--orange);
+    }
+    .card.warning {
+      border-left-color: #ef4444;
+      background: #fef2f2;
+    }
+    .card.success {
+      border-left-color: #22c55e;
+      background: #f0fdf4;
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      color: var(--navy);
+    }
+    .card.warning .card-title { color: #dc2626; }
+    .card.success .card-title { color: #16a34a; }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 12.5px;
+    }
+    th {
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    th:first-child { border-radius: 6px 0 0 0; }
+    th:last-child { border-radius: 0 6px 0 0; }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: var(--gray); }
+    .mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--navy2); }
+
+    /* File structure */
+    .file-tree {
+      background: #1a2332;
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 2;
+      margin: 16px 0;
+    }
+    .ft-dir { color: #93c5fd; }
+    .ft-file { color: #e2e8f0; }
+    .ft-comment { color: #6b7280; font-style: italic; }
+    .ft-important { color: #f87171; font-weight: 600; }
+    .ft-orange { color: #fbbf24; }
+
+    /* Step markers */
+    .steps { list-style: none; padding: 0; }
+    .step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 30px; height: 30px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--orange), var(--orange2));
+      color: #fff;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800;
+    }
+    .step-content { flex: 1; }
+    .step-title { font-weight: 700; color: var(--navy); margin-bottom: 4px; font-size: 13px; }
+
+    /* Header stripe on content pages */
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    .page-header-num {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--orange), var(--orange2));
+      color: #fff;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    /* Footer on each page */
+    @media print {
+      @page { size: A4; margin: 0; }
+      .cover { min-height: 100vh; }
+      .no-print { display: none; }
+    }
+
+    .doc-footer {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .highlight { background: rgba(242,148,48,0.12); color: var(--navy); padding: 1px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+    .tag-navy { display: inline-block; background: var(--navy); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+    .tag-orange { display: inline-block; background: var(--orange); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     PAGE DE COUVERTURE
+══════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-top">
+    <!-- Logo SVG embarqué -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 255 70" class="cover-logo">
+      <g transform="translate(2, 5) scale(0.38) translate(-15, -12)">
+        <path d="M0 0 C0.99 0.495 0.99 0.495 2 1 C0.53240234 1.96099609 0.53240234 1.96099609 -0.96484375 2.94140625 C-22.87051517 16.66743081 -22.87051517 16.66743081 -34.578125 38.76171875 C-34.97873751 41.83679074 -35.14493214 44.86431354 -35.23876953 47.96240234 C-35.74033464 62.67387176 -40.02630877 75.59151949 -50.875 86.0625 C-57.55256703 91.66792712 -65.42084409 95.75358429 -73 100 C-72.34 100 -71.68 100 -71 100 C-73.08915049 110.95181995 -75.61470725 119.6911041 -82 129 C-83.51553092 125.02549507 -82.49888623 121.79518851 -81.5625 117.75 C-81.27503906 116.48671875 -80.98757812 115.2234375 -80.69140625 113.921875 C-80.46324219 112.95765625 -80.23507813 111.9934375 -80 111 C-80.56847656 112.134375 -81.13695312 113.26875 -81.72265625 114.4375 C-89.63959967 129.96682284 -89.63959967 129.96682284 -96 136 C-97 134 -97 134 -96.37915039 131.93701172 C-95.34765625 129.4296875 -94.98349609 128.53378906 -94.61933594 127.63789063 C-94.24414062 126.71484375 -93.85419922 125.77769531 -93.0625 123.875 C-92.67642578 122.93011719 -92.29035156 121.98523438 -91.89257812 121.01171875 C-90.93524154 118.67156265 -89.97080009 116.33459572 -89 114 C-92.97670724 117.59797321 -95.77608905 121.83206405 -98.75 126.25 C-100.28515625 128.5078125 -101.52734756 130.33594311 -102.76547582 132.166687 C-104 134 -104 134 -102.97265625 125.328125 C-101.58325195 121.89648438 -101.08140381 120.69314453 -100.57955566 119.48980469 C-100.0625 118.25 -99.55708679 117.02748535 -99.29672241 116.39770508 C-93.54303309 102.49948543 -87.26648798 89.93753773 -78 78 C-75.99754281 75.33517269 -75 74 -75.825 74.165 C-76.65 74.33 -77.5 74.5 -85.22307946 75.60329707 C-91.76733087 75.07353191 -99 72 -99.66 70.68 C-100 70 -95.545 69.01 -91 68 C-92.66804688 67.70609375 -93.52734375 67.5546875 C-101.07930446 66.04948571 -107.12440881 64.11975058 C-113 59 -113.66 57.68 -114 57 C-106.41 57 -98.82 57 -91 57 C-94.8775 56.505 -96.875 56.25 C-108.76156381 54.36774586 -116.99599595 50.27433898 C-124.75390625 40.875 -126 39 -126 37 C-124.9486084 37.36351562 -124.40698242 37.55078125 C-118.42955694 39.58431821 -112.40539066 41.34763629 C-106.3125 43 -103.41357422 43.78955078 C-95.98677992 45.78777459 -88.54414814 47.50104885 C-81 49 -83.04443359 48.43676758 C-89.26624399 46.69264604 -92.375 45.8125 C-95.58984375 44.92773438 C-109.76710949 40.88329967 -119.71874609 35.58146709 C-127.48828125 22.8359375 -130.82656452 15.21056259 C-132 11 -125.44672593 14.58850709 -122.25 16.625 C-112.7332511 22.24511265 -107.73046875 24.7109375 C-105.6605072 25.73925781 C-95.0108721 30.90589933 -89.66015625 33.4375 C-84.8725901 35.71487501 -82.47924805 36.85449219 C-79.234101 38.38663564 -77.6081543 39.14550781 C-57.21280757 49.00985491 -50 59 C-51.82879989 56.16372295 -52.75 54.75 C-54.296875 52.359375 C-55.9174447 49.92362943 -58.203125 48.09375 C-60 46 -60.3125 43.046875 C-58.51180324 27.79059668 -51.875 22.0625 C-45.78023942 18.95007353 -40.6796875 18.86328125 C-32.51597274 18.3266061 -20.125 11.1875 C-13.7578125 7.41796875 C-7.23811403 3.55165011 0 0 Z" fill="#FC6D09" transform="translate(141,12)"/>
+      </g>
+      <text x="57" y="44" font-family="Arial, sans-serif" font-size="40" font-weight="900" fill="#FFFFFF">MD</text>
+      <text x="57" y="64" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#F29430" letter-spacing="1.8">TRANSITION</text>
+    </svg>
+    <div class="cover-badge">Documentation Technique</div>
+  </div>
+
+  <div class="cover-center">
+    <div class="cover-title">
+      Manuel<br><span>Technique</span><br>du Projet
+    </div>
+    <div class="cover-subtitle">
+      Architecture, configuration, déploiement et maintenance du site vitrine
+      <strong style="color:rgba(255,255,255,0.85);">md-transition.fr</strong>
+      — développé avec Next.js 14, TypeScript et Tailwind CSS.
+    </div>
+  </div>
+
+  <div class="cover-meta">
+    <div class="cover-author">
+      <strong>Thierry Gravelaine TEMGOUA</strong>
+      Ingénieur Logiciel
+    </div>
+    <div class="cover-date">Version 1.0 — Avril 2026<br>Usage interne — Confidentiel</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TABLE DES MATIÈRES
+══════════════════════════════════════════════ -->
+<div class="toc-page">
+  <div class="section-tag">Sommaire</div>
+  <h2 class="page-title">Table des matières</h2>
+  <div class="page-title-line"></div>
+  <ul class="toc-list">
+    <li class="toc-item">
+      <div class="toc-num">1</div>
+      <span class="toc-label">Présentation du projet</span>
+      <span class="toc-page-num">3</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">2</div>
+      <span class="toc-label">Stack technique — langages et bibliothèques</span>
+      <span class="toc-page-num">4</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">3</div>
+      <span class="toc-label">Structure du projet — dossiers et fichiers importants</span>
+      <span class="toc-page-num">5</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">4</div>
+      <span class="toc-label">Le fichier .gitignore — rôle et contenu</span>
+      <span class="toc-page-num">6</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">5</div>
+      <span class="toc-label">Variables d'environnement — setup local et production</span>
+      <span class="toc-page-num">7</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">6</div>
+      <span class="toc-label">Configuration de l'envoi d'emails via OVH</span>
+      <span class="toc-page-num">8</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">7</div>
+      <span class="toc-label">Changer l'adresse email administrateur</span>
+      <span class="toc-page-num">9</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">8</div>
+      <span class="toc-label">Déploiement local — du clone au navigateur</span>
+      <span class="toc-page-num">10</span>
+    </li>
+    <li class="toc-item">
+      <div class="toc-num">9</div>
+      <span class="toc-label">Mise en production sur Vercel</span>
+      <span class="toc-page-num">11</span>
+    </li>
+  </ul>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     1. PRÉSENTATION
+══════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="section-tag">Section 1</div>
+  <div class="page-header">
+    <div class="page-header-num">1</div>
+    <div>
+      <h2>Présentation du projet</h2>
+      <div class="page-title-line"></div>
+    </div>
+  </div>
+
+  <p>
+    <strong>MD Transition</strong> est le site vitrine professionnel de <strong>Martine Dorival</strong>,
+    facilitatrice et partenaire pour entrepreneurs, artisans, commerçants et associations basée à
+    Conflans-Sainte-Honorine. Le site propose une présentation des services, un formulaire de contact
+    avec envoi d'emails automatisé, et une prise de rendez-vous.
+  </p>
+
+  <h3>Objectifs techniques</h3>
+  <ul>
+    <li>Site <strong>100 % statique</strong> généré côté serveur pour des performances maximales</li>
+    <li>SEO complet : métadonnées Open Graph, JSON-LD, sitemap automatique</li>
+    <li>Formulaire de contact sécurisé avec protection anti-spam (honeypot) et limitation de débit</li>
+    <li>Envoi d'emails transactionnels via serveur SMTP OVH</li>
+    <li>Design responsive adapté mobile, tablette et desktop</li>
+    <li>Déploiement continu sur <strong>Vercel</strong></li>
+  </ul>
+
+  <h3>URL de production</h3>
+  <div class="card">
+    <div class="card-title">Accès</div>
+    <p style="margin:0"><strong>Site live :</strong> <span class="highlight">https://md-transition.fr</span><br>
+    <strong>Hébergement :</strong> Vercel (serverless)<br>
+    <strong>DNS et messagerie :</strong> OVH</p>
+  </div>
+
+  <div class="doc-footer">
+    <span>MD Transition — Manuel Technique v1.0</span>
+    <span>Thierry Gravelaine TEMGOUA — Ingénieur Logiciel</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     2. STACK TECHNIQUE
+══════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="section-tag">Section 2</div>
+  <div class="page-header">
+    <div class="page-header-num">2</div>
+    <div>
+      <h2>Stack technique — langages et bibliothèques</h2>
+      <div class="page-title-line"></div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Technologie</th>
+        <th>Version</th>
+        <th>Rôle</th>
+        <th>Pourquoi ce choix</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Next.js</strong></td>
+        <td class="mono">14.2.29</td>
+        <td>Framework React principal</td>
+        <td>Rendu serveur (SSG/SSR), routes API intégrées, SEO natif, déploiement Vercel optimisé</td>
+      </tr>
+      <tr>
+        <td><strong>TypeScript</strong></td>
+        <td class="mono">^5</td>
+        <td>Langage de développement</td>
+        <td>Typage statique, détection d'erreurs à la compilation, meilleure maintenabilité</td>
+      </tr>
+      <tr>
+        <td><strong>Tailwind CSS</strong></td>
+        <td class="mono">^3.4.1</td>
+        <td>Framework CSS utilitaire</td>
+        <td>Développement rapide, bundle CSS minimal en production, cohérence du design</td>
+      </tr>
+      <tr>
+        <td><strong>React Hook Form</strong></td>
+        <td class="mono">^7.52.1</td>
+        <td>Gestion du formulaire</td>
+        <td>Performances (re-renders minimaux), intégration native avec Zod</td>
+      </tr>
+      <tr>
+        <td><strong>Zod</strong></td>
+        <td class="mono">^3.23.8</td>
+        <td>Validation des données</td>
+        <td>Schémas TypeScript-first, validation côté client ET serveur avec le même code</td>
+      </tr>
+      <tr>
+        <td><strong>Nodemailer</strong></td>
+        <td class="mono">^6.9.14</td>
+        <td>Envoi d'emails SMTP</td>
+        <td>Bibliothèque Node.js de référence, support SSL/TLS natif, compatible OVH</td>
+      </tr>
+      <tr>
+        <td><strong>Framer Motion</strong></td>
+        <td class="mono">^11.3.28</td>
+        <td>Animations UI</td>
+        <td>API déclarative, animations fluides sur les erreurs de formulaire et transitions</td>
+      </tr>
+      <tr>
+        <td><strong>Phosphor Icons</strong></td>
+        <td class="mono">^2.1.10</td>
+        <td>Icônes vectorielles</td>
+        <td>Bibliothèque cohérente, tree-shaking efficace, plusieurs styles disponibles</td>
+      </tr>
+      <tr>
+        <td><strong>next-sitemap</strong></td>
+        <td class="mono">^4.2.3</td>
+        <td>Génération du sitemap</td>
+        <td>Génération automatique de sitemap.xml et robots.txt à chaque build</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <div class="card-title">Note sur l'architecture</div>
+    <p style="margin:0">Le projet utilise le <strong>App Router de Next.js 14</strong> (dossier <span class="highlight">src/app/</span>),
+    la convention moderne remplaçant le Pages Router. Les routes API (comme l'endpoint de contact)
+    sont des <strong>Route Handlers</strong> serverless, exécutés uniquement côté serveur.</p>
+  </div>
+
+  <div class="doc-footer">
+    <span>MD Transition — Manuel Technique v1.0</span>
+    <span>Thierry Gravelaine TEMGOUA — Ingénieur Logiciel</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     3. STRUCTURE DU PROJET
+══════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="section-tag">Section 3</div>
+  <div class="page-header">
+    <div class="page-header-num">3</div>
+    <div>
+      <h2>Structure du projet — dossiers et fichiers importants</h2>
+      <div class="page-title-line"></div>
+    </div>
+  </div>
+
+  <div class="file-tree">
+    <span class="line"><span class="ft-dir">md-projet/</span></span>
+    <span class="line">├── <span class="ft-important">.env.local</span>              <span class="ft-comment">⚠ Variables secrètes — jamais commitées</span></span>
+    <span class="line">├── <span class="ft-important">.gitignore</span>              <span class="ft-comment">Fichiers exclus du dépôt Git</span></span>
+    <span class="line">├── <span class="ft-orange">package.json</span>             <span class="ft-comment">Dépendances et scripts</span></span>
+    <span class="line">├── <span class="ft-orange">next.config.mjs</span>          <span class="ft-comment">Configuration Next.js</span></span>
+    <span class="line">├── <span class="ft-orange">tailwind.config.ts</span>       <span class="ft-comment">Couleurs, polices, animations custom</span></span>
+    <span class="line">├── <span class="ft-orange">tsconfig.json</span>            <span class="ft-comment">Configuration TypeScript</span></span>
+    <span class="line">│</span>
+    <span class="line">├── <span class="ft-dir">public/</span>                  <span class="ft-comment">Assets statiques (images, favicon, SVG)</span></span>
+    <span class="line">│   ├── <span class="ft-file">logo.png</span>             <span class="ft-comment">Logo principal (fond sombre)</span></span>
+    <span class="line">│   ├── <span class="ft-file">logo-light.svg</span>       <span class="ft-comment">Logo SVG pour fonds clairs</span></span>
+    <span class="line">│   ├── <span class="ft-file">favicon.svg / .png</span>   <span class="ft-comment">Icône d'onglet navigateur</span></span>
+    <span class="line">│   ├── <span class="ft-file">robots.txt</span>           <span class="ft-comment">Instructions robots SEO</span></span>
+    <span class="line">│   └── <span class="ft-file">sitemap.xml</span>          <span class="ft-comment">Généré automatiquement au build</span></span>
+    <span class="line">│</span>
+    <span class="line">└── <span class="ft-dir">src/</span></span>
+    <span class="line">    ├── <span class="ft-dir">app/</span>                 <span class="ft-comment">Pages et routes (App Router Next.js 14)</span></span>
+    <span class="line">    │   ├── <span class="ft-important">api/contact/route.ts</span> <span class="ft-comment">⚠ Endpoint envoi d'emails</span></span>
+    <span class="line">    │   ├── <span class="ft-file">page.tsx</span>         <span class="ft-comment">Page d'accueil (/)</span></span>
+    <span class="line">    │   ├── <span class="ft-file">contact/</span>         <span class="ft-comment">Page contact (/contact)</span></span>
+    <span class="line">    │   ├── <span class="ft-file">services/</span>        <span class="ft-comment">Page services (/services)</span></span>
+    <span class="line">    │   ├── <span class="ft-file">a-propos/</span>        <span class="ft-comment">Page à propos (/a-propos)</span></span>
+    <span class="line">    │   ├── <span class="ft-file">rendez-vous/</span>     <span class="ft-comment">Page prise de RDV</span></span>
+    <span class="line">    │   └── <span class="ft-file">layout.tsx</span>       <span class="ft-comment">Layout global + SEO (metadata, JSON-LD)</span></span>
+    <span class="line">    │</span>
+    <span class="line">    ├── <span class="ft-dir">components/</span></span>
+    <span class="line">    │   ├── <span class="ft-file">layout/Header.tsx</span>    <span class="ft-comment">Navigation principale</span></span>
+    <span class="line">    │   ├── <span class="ft-file">layout/Footer.tsx</span>    <span class="ft-comment">Pied de page</span></span>
+    <span class="line">    │   ├── <span class="ft-file">forms/ContactForm.tsx</span> <span class="ft-comment">Formulaire de contact</span></span>
+    <span class="line">    │   └── <span class="ft-file">sections/HeroSection.tsx</span> <span class="ft-comment">Section hero page d'accueil</span></span>
+    <span class="line">    │</span>
+    <span class="line">    └── <span class="ft-dir">lib/</span></span>
+    <span class="line">        ├── <span class="ft-important">email.ts</span>             <span class="ft-comment">⚠ Logique envoi d'emails SMTP</span></span>
+    <span class="line">        ├── <span class="ft-important">validations.ts</span>       <span class="ft-comment">⚠ Schémas Zod (formulaire)</span></span>
+    <span class="line">        └── <span class="ft-file">utils.ts</span>             <span class="ft-comment">Utilitaires (sanitisation, cn())</span></span>
+  </div>
+
+  <div class="card warning">
+    <div class="card-title">Fichiers critiques à ne jamais supprimer</div>
+    <p style="margin:0">
+      <span class="highlight">src/lib/email.ts</span> — toute la logique d'envoi email<br>
+      <span class="highlight">src/lib/validations.ts</span> — validation du formulaire côté client ET serveur<br>
+      <span class="highlight">src/app/api/contact/route.ts</span> — endpoint de réception du formulaire
+    </p>
+  </div>
+
+  <div class="doc-footer">
+    <span>MD Transition — Manuel Technique v1.0</span>
+    <span>Thierry Gravelaine TEMGOUA — Ingénieur Logiciel</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     4. .GITIGNORE
+══════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="section-tag">Section 4</div>
+  <div class="page-header">
+    <div class="page-header-num">4</div>
+    <div>
+      <h2>Le fichier .gitignore — rôle et contenu</h2>
+      <div class="page-title-line"></div>
+    </div>
+  </div>
+
+  <p>
+    Le fichier <span class="highlight">.gitignore</span> est une liste de patterns indiquant à Git
+    quels fichiers ou dossiers <strong>ne doivent jamais être inclus dans le dépôt</strong>.
+    Tout ce qui est dans ce fichier reste uniquement sur la machine locale et n'est ni committé
+    ni poussé vers GitHub ou Vercel.
+  </p>
+
+  <h3>Contenu et justification des entrées</h3>
+
+  <table>
+    <thead>
+      <tr><th>Entrée</th><th>Ce que cela exclut</th><th>Pourquoi</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="mono">node_modules/</td>
+        <td>Toutes les dépendances installées</td>
+        <td>Poids excessif (centaines de Mo), régénéré par <span class="mono">npm install</span></td>
+      </tr>
+      <tr>
+        <td class="mono">/.next/</td>
+        <td>Dossier de build Next.js</td>
+        <td>Généré à chaque build, inutile à versionner</td>
+      </tr>
+      <tr>
+        <td class="mono">.env</td>
+        <td>Fichier de variables d'environnement</td>
+        <td rowspan="5" style="vertical-align:middle"><strong style="color:#dc2626">Contient des mots de passe et clés SMTP !</strong> Ne jamais committer.</td>
+      </tr>
+      <tr>
+        <td class="mono">.env.local</td>
+        <td>Variables locales (dev)</td>
+      </tr>
+      <tr>
+        <td class="mono">.env.*.local</td>
+        <td>Toutes variantes locales</td>
+      </tr>
+      <tr>
+        <td class="mono">.env.production.local</td>
+        <td>Variables production locales</td>
+      </tr>
+      <tr>
+        <td class="mono">.env.development.local</td>
+        <td>Variables développement locales</td>
+      </tr>
+      <tr>
+        <td class="mono">.vercel</td>
+        <td>Config Vercel locale</td>
+        <td>Contient des tokens d'accès Vercel</td>
+      </tr>
+      <tr>
+        <td class="mono">.idea/ .vscode/</td>
+        <td>Config IDE (IntelliJ, VS Code)</td>
+        <td>Paramètres personnels qui ne concernent pas le projet</td>
+      </tr>
+      <tr>
+        <td class="mono">.DS_Store, Thumbs.db</td>
+        <td>Métadonnées macOS/Windows</td>
+        <td>Fichiers système inutiles sur le dépôt</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card warning">
+    <div class="card-title">Point de vigilance — envoi vers Vercel (vercel --prod)</div>
+    <p style="margin:0">
+      Lorsque vous déployez avec <span class="highlight">vercel --prod</span> ou via un push Git,
+      les fichiers <span class="highlight">.env.local</span> ne sont <strong>jamais envoyés</strong>.
+      Les variables d'environnement doivent être configurées manuellement dans le dashboard Vercel
+      (voir Section 9). C'est un comportement voulu et sécurisé.
+    </p>
+  </div>
+
+  <div class="doc-footer">
+    <span>MD Transition — Manuel Technique v1.0</span>
+    <span>Thierry Gravelaine TEMGOUA — Ingénieur Logiciel</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     5. VARIABLES D'ENVIRONNEMENT
+══════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="section-tag">Section 5</div>
+  <div class="page-header">
+    <div class="page-header-num">5</div>
+    <div>
+      <h2>Variables d'environnement</h2>
+      <div class="page-title-line"></div>
+    </div>
+  </div>
+
+  <p>
+    Les variables d'environnement stockent toutes les informations sensibles et les configurations
+    qui changent selon le contexte (local vs production). Elles sont définies dans
+    <span class="highlight">.env.local</span> en local et dans le <strong>dashboard Vercel</strong>
+    en production.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Variable</th><th>Valeur locale (dev)</th><th>Valeur production</th><th>Rôle</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="mono">SMTP_HOST</td>
+        <td class="mono">ssl0.ovh.net</td>
+        <td class="mono">ssl0.ovh.net</td>
+        <td>Adresse du serveur mail OVH</td>
+      </tr>
+      <tr>
+        <td class="mono">SMTP_PORT</td>
+        <td class="mono">465</td>
+        <td class="mono">465</td>
+        <td>Port SSL/TLS natif (ou 587 STARTTLS)</td>
+      </tr>
+      <tr>
+        <td class="mono">SMTP_SECURE</td>
+        <td class="mono">true</td>
+        <td class="mono">true</td>
+        <td>Activer SSL natif sur port 465</td>
+      </tr>
+      <tr>
+        <td class="mono">SMTP_USER</td>
+        <td class="mono">test@md-transition.fr</td>
+        <td class="mono">contact@md-transition.fr</td>
+        <td>Compte expéditeur OVH</td>
+      </tr>
+      <tr>
+        <td class="mono">SMTP_PASS</td>
+        <td><em>(mot de passe OVH)</em></td>
+        <td><em>(mot de passe OVH)</em></td>
+        <td>Mot de passe du compte email</td>
+      </tr>
+      <tr>
+        <td class="mono">SMTP_FROM</td>
+        <td class="mono">test@md-transition.fr</td>
+        <td class="mono">contact@md-transition.fr</td>
+        <td>Adresse affichée dans le champ "De"</td>
+      </tr>
+      <tr>
+        <td class="mono">ADMIN_EMAIL</td>
+        <td class="mono">test@md-transition.fr</td>
+        <td class="mono">contact@md-transition.fr</td>
+        <td>Destinataire des notifications de contact</td>
+      </tr>
+      <tr>
+        <td class="mono">NEXT_PUBLIC_SITE_URL</td>
+        <td class="mono">http://localhost:3000</td>
+        <td class="mono">https://md-transition.fr</td>
+        <td>URL base du site (liens dans emails)</td>
+      </tr>
+      <tr>
+        <td class="mono">NODE_ENV</td>
+        <td class="mono">development</td>
+        <td class="mono">production</td>
+        <td>Active/désactive la vérification TLS stricte</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <div class="card-title">Fichier .env.local — structure type</div>
+    <div class="code-block">
+      <span class="line"><span class="comment"># Configuration SMTP OVH</span></span>
+      <span class="line"><span class="key">SMTP_HOST</span>=<span class="val">ssl0.ovh.net</span></span>
+      <span class="line"><span class="key">SMTP_PORT</span>=<span class="val">465</span></span>
+      <span class="line"><span class="key">SMTP_SECURE</span>=<span class="val">true</span></span>
+      <span class="line"><span class="key">SMTP_USER</span>=<span class="val">test@md-transition.fr</span></span>
+      <span class="line"><span class="key">SMTP_PASS</span>=<span class="val">votre_mot_de_passe</span></span>
+      <span class="line"><span class="key">SMTP_FROM</span>=<span class="val">test@md-transition.fr</span></span>
+      <span class="line"><span class="key">ADMIN_EMAIL</span>=<span class="val">test@md-transition.fr</span></span>
+      <span class="line"><span class="key">NEXT_PUBLIC_SITE_URL</span>=<span class="val">http://localhost:3000</span></span>
+      <span class="line"><span class="key">NODE_ENV</span>=<span class="val">development</span></span>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <span>MD Transition — Manuel Technique v1.0</span>
+    <span>Thierry Gravelaine TEMGOUA — Ingénieur Logiciel</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     6. CONFIGURATION EMAIL OVH
+══════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="section-tag">Section 6</div>
+  <div class="page-header">
+    <div class="page-header-num">6</div>
+    <div>
+      <h2>Configuration de l'envoi d'emails via OVH</h2>
+      <div class="page-title-line"></div>
+    </div>
+  </div>
+
+  <p>
+    L'envoi d'emails est géré par la bibliothèque <strong>Nodemailer</strong> dans le fichier
+    <span class="highlight">src/lib/email.ts</span>. Le serveur SMTP utilisé est celui d'OVH,
+    où est hébergée la messagerie du domaine <strong>md-transition.fr</strong>.
+  </p>
+
+  <h3>Paramètres SMTP OVH</h3>
+  <table>
+    <thead><tr><th>Paramètre</th><th>Valeur</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Hôte SMTP</td><td class="mono">ssl0.ovh.net</td><td>Serveur sortant OVH</td></tr>
+      <tr><td>Port SSL</td><td class="mono">465</td><td>SSL/TLS natif — recommandé</td></tr>
+      <tr><td>Port STARTTLS</td><td class="mono">587</td><td>Alternative si 465 est bloqué</td></tr>
+      <tr><td>Chiffrement</td><td class="mono">SSL/TLS</td><td>Connexion chiffrée de bout en bout</td></tr>
+      <tr><td>Authentification</td><td>Login + Mot de passe</td><td>Identifiants du compte email OVH</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Flux d'un envoi de formulaire</h3>
+  <ol>
+    <li>L'utilisateur soumet le formulaire sur <span class="highlight">/contact</span></li>
+    <li>Le formulaire envoie une requête <strong>POST</strong> vers <span class="highlight">/api/contact</span></li>
+    <li>L'API vérifie le rate limit (max 3 req/min par IP) et le champ honeypot (anti-spam)</li>
+    <li>Les données sont validées avec le schéma Zod et sanitisées (protection XSS)</li>
+    <li>Nodemailer se connecte à <span class="highlight">ssl0.ovh.net:465</span> et envoie <strong>2 emails simultanément</strong> :</li>
+  </ol>
+  <div style="margin-left: 24px; margin-top: 8px;">
+    <div class="card" style="margin-bottom:8px;">
+      <div class="card-title">Email 1 — Confirmation au visiteur</div>
+      <p style="margin:0">Envoyé à l'adresse du visiteur. Confirme la réception du message, rappelle le type de besoin et le texte envoyé.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Email 2 — Notification à l'administrateur</div>
+      <p style="margin:0">Envoyé à <span class="highlight">ADMIN_EMAIL</span>. Tableau récapitulatif complet : nom, email, téléphone, type de besoin, message, date/heure Paris.</p>
+    </div>
+  </div>
+
+  <h3>Créer un compte email chez OVH</h3>
+  <ol>
+    <li>Se connecter sur <span class="highlight">ovh.com/manager</span></li>
+    <li>Aller dans <strong>Web Cloud → Emails → md-transition.fr</strong></li>
+    <li>Onglet <strong>Comptes email</strong> → Créer un compte</li>
+    <li>Choisir le nom (ex: <span class="highlight">contact</span>), définir le mot de passe</li>
+    <li>Reporter ce mot de passe dans <span class="highlight">.env.local</span> (SMTP_PASS) et dans Vercel</li>
+  </ol>
+
+  <div class="doc-footer">
+    <span>MD Transition — Manuel Technique v1.0</span>
+    <span>Thierry Gravelaine TEMGOUA — Ingénieur Logiciel</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     7. CHANGER L'EMAIL ADMIN
+══════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="section-tag">Section 7</div>
+  <div class="page-header">
+    <div class="page-header-num">7</div>
+    <div>
+      <h2>Changer l'adresse email administrateur</h2>
+      <div class="page-title-line"></div>
+    </div>
+  </div>
+
+  <p>
+    L'email administrateur est l'adresse qui <strong>reçoit toutes les notifications</strong>
+    lorsqu'un visiteur remplit le formulaire de contact. Il est configuré en 3 endroits distincts.
+  </p>
+
+  <h3>Étape 1 — Modifier le fichier .env.local (environnement local)</h3>
+  <p>Ouvrir <span class="highlight">.env.local</span> à la racine du projet et changer la ligne :</p>
+  <div class="code-block">
+    <span class="line"><span class="comment"># Avant</span></span>
+    <span class="line"><span class="key">ADMIN_EMAIL</span>=<span class="val">test@md-transition.fr</span></span>
+    <span class="line"></span>
+    <span class="line"><span class="comment"># Après (exemple)</span></span>
+    <span class="line"><span class="key">ADMIN_EMAIL</span>=<span class="val">contact@md-transition.fr</span></span>
+  </div>
+
+  <div class="card warning">
+    <div class="card-title">Important</div>
+    <p style="margin:0">Cette modification ne s'applique <strong>qu'en local</strong>. Pour la production, il faut aussi mettre à jour Vercel (voir Étape 2).</p>
+  </div>
+
+  <h3>Étape 2 — Mettre à jour la variable sur Vercel (production)</h3>
+  <ul class="steps">
+    <li class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Aller sur vercel.com</div>
+        <p>Se connecter → sélectionner le projet <strong>md-transition</strong></p>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Accéder aux variables d'environnement</div>
+        <p>Onglet <strong>Settings</strong> → section <strong>Environment Variables</strong></p>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Modifier ADMIN_EMAIL</div>
+        <p>Trouver la variable <span class="highlight">ADMIN_EMAIL</span> → cliquer sur le crayon d'édition → entrer la nouvelle adresse → <strong>Save</strong></p>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Redéployer</div>
+        <p>Les variables ne sont prises en compte qu'au prochain déploiement. Lancer <span class="highlight">vercel --prod</span> dans le terminal ou cliquer <strong>Redeploy</strong> dans Vercel.</p>
+      </div>
+    </li>
+  </ul>
+
+  <h3>Récapitulatif des fichiers impactés</h3>
+  <table>
+    <thead><tr><th>Fichier / Emplacement</th><th>Variable à changer</th><th>Impact</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="mono">.env.local</td>
+        <td class="mono">ADMIN_EMAIL=...</td>
+        <td>Environnement local uniquement</td>
+      </tr>
+      <tr>
+        <td>Vercel Dashboard → Settings → Env Vars</td>
+        <td class="mono">ADMIN_EMAIL</td>
+        <td>Environnement de production</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="doc-footer">
+    <span>MD Transition — Manuel Technique v1.0</span>
+    <span>Thierry Gravelaine TEMGOUA — Ingénieur Logiciel</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     8. DÉPLOIEMENT LOCAL
+══════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="section-tag">Section 8</div>
+  <div class="page-header">
+    <div class="page-header-num">8</div>
+    <div>
+      <h2>Déploiement local — du clone au navigateur</h2>
+      <div class="page-title-line"></div>
+    </div>
+  </div>
+
+  <p>
+    Cette section décrit la procédure complète pour installer et lancer le projet en local,
+    depuis la récupération du code source jusqu'à l'accès dans le navigateur.
+  </p>
+
+  <h3>Prérequis</h3>
+  <table>
+    <thead><tr><th>Outil</th><th>Version minimum</th><th>Installation</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Node.js</strong></td><td>18.x ou supérieure</td><td class="mono">nodejs.org</td></tr>
+      <tr><td><strong>npm</strong></td><td>inclus avec Node.js</td><td>—</td></tr>
+      <tr><td><strong>Git</strong></td><td>2.x</td><td class="mono">git-scm.com</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Étapes d'installation</h3>
+  <ul class="steps">
+    <li class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Cloner le dépôt GitHub</div>
+        <div class="code-block">
+          <span class="line"><span class="cmd">git clone</span> <span class="path">https://github.com/mdtransitionfr/md-transition.git</span></span>
+          <span class="line"><span class="cmd">cd</span> <span class="plain">md-transition</span></span>
+        </div>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Installer les dépendances</div>
+        <div class="code-block">
+          <span class="line"><span class="cmd">npm install</span></span>
+          <span class="line"><span class="comment"># Crée le dossier node_modules/ (~500 Mo)</span></span>
+        </div>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Créer le fichier .env.local</div>
+        <p>Créer un fichier <span class="highlight">.env.local</span> à la racine du projet :</p>
+        <div class="code-block">
+          <span class="line"><span class="key">SMTP_HOST</span>=<span class="val">ssl0.ovh.net</span></span>
+          <span class="line"><span class="key">SMTP_PORT</span>=<span class="val">465</span></span>
+          <span class="line"><span class="key">SMTP_SECURE</span>=<span class="val">true</span></span>
+          <span class="line"><span class="key">SMTP_USER</span>=<span class="val">test@md-transition.fr</span></span>
+          <span class="line"><span class="key">SMTP_PASS</span>=<span class="val">VOTRE_MOT_DE_PASSE_OVH</span></span>
+          <span class="line"><span class="key">SMTP_FROM</span>=<span class="val">test@md-transition.fr</span></span>
+          <span class="line"><span class="key">ADMIN_EMAIL</span>=<span class="val">test@md-transition.fr</span></span>
+          <span class="line"><span class="key">NEXT_PUBLIC_SITE_URL</span>=<span class="val">http://localhost:3000</span></span>
+          <span class="line"><span class="key">NODE_ENV</span>=<span class="val">development</span></span>
+        </div>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Lancer le serveur de développement</div>
+        <div class="code-block">
+          <span class="line"><span class="cmd">npm run dev</span></span>
+        </div>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <div class="step-title">Ouvrir dans le navigateur</div>
+        <div class="code-block">
+          <span class="line"><span class="val">http://localhost:3000</span></span>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <h3>Autres commandes utiles</h3>
+  <div class="code-block">
+    <span class="line"><span class="cmd">npm run build</span>    <span class="comment"># Build de production (vérification complète)</span></span>
+    <span class="line"><span class="cmd">npm run start</span>    <span class="comment"># Lancer le build de production en local</span></span>
+    <span class="line"><span class="cmd">npm run lint</span>     <span class="comment"># Vérification ESLint du code</span></span>
+    <span class="line"><span class="cmd">vercel --prod</span>    <span class="comment"># Déployer en production sur Vercel</span></span>
+  </div>
+
+  <div class="doc-footer">
+    <span>MD Transition — Manuel Technique v1.0</span>
+    <span>Thierry Gravelaine TEMGOUA — Ingénieur Logiciel</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     9. MISE EN PRODUCTION VERCEL
+══════════════════════════════════════════════ -->
+<div class="content-page">
+  <div class="section-tag">Section 9</div>
+  <div class="page-header">
+    <div class="page-header-num">9</div>
+    <div>
+      <h2>Mise en production sur Vercel</h2>
+      <div class="page-title-line"></div>
+    </div>
+  </div>
+
+  <p>
+    Vercel est la plateforme de déploiement utilisée pour héberger le site.
+    Le déploiement est automatique à chaque push sur la branche <span class="highlight">main</span> de GitHub,
+    ou manuel via la commande <span class="highlight">vercel --prod</span>.
+  </p>
+
+  <h3>Configurer les variables d'environnement sur Vercel</h3>
+  <p>Cette étape est <strong>obligatoire</strong> au premier déploiement ou après tout changement de configuration.</p>
+
+  <ul class="steps">
+    <li class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Se connecter à Vercel</div>
+        <p>Aller sur <span class="highlight">vercel.com</span> → sélectionner le projet <strong>md-transition</strong></p>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Accéder aux réglages</div>
+        <p>Onglet <strong>Settings</strong> dans le menu du projet → section <strong>Environment Variables</strong></p>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Ajouter chaque variable</div>
+        <p>Pour chaque variable : saisir le nom, la valeur, sélectionner l'environnement <strong>Production</strong>, puis <strong>Save</strong>.</p>
+      </div>
+    </li>
+    <li class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Redéployer pour appliquer</div>
+        <div class="code-block">
+          <span class="line"><span class="cmd">vercel --prod</span></span>
+          <span class="line"><span class="comment"># ou : Deployments → Redeploy dans l'interface Vercel</span></span>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <h3>Variables à configurer sur Vercel (production)</h3>
+  <div class="code-block">
+    <span class="line"><span class="key">SMTP_HOST</span>=<span class="val">ssl0.ovh.net</span></span>
+    <span class="line"><span class="key">SMTP_PORT</span>=<span class="val">465</span></span>
+    <span class="line"><span class="key">SMTP_SECURE</span>=<span class="val">true</span></span>
+    <span class="line"><span class="key">SMTP_USER</span>=<span class="val">contact@md-transition.fr</span>   <span class="comment"># Adresse production</span></span>
+    <span class="line"><span class="key">SMTP_PASS</span>=<span class="val">votre_mot_de_passe_ovh</span></span>
+    <span class="line"><span class="key">SMTP_FROM</span>=<span class="val">contact@md-transition.fr</span></span>
+    <span class="line"><span class="key">ADMIN_EMAIL</span>=<span class="val">contact@md-transition.fr</span>  <span class="comment"># Destinataire des contacts</span></span>
+    <span class="line"><span class="key">NEXT_PUBLIC_SITE_URL</span>=<span class="val">https://md-transition.fr</span></span>
+  </div>
+
+  <div class="card success">
+    <div class="card-title">Vérification post-déploiement</div>
+    <p style="margin:0">
+      Après déploiement, tester le formulaire sur <span class="highlight">https://md-transition.fr/contact</span>.
+      En cas d'erreur 500, consulter les logs dans Vercel → <strong>Deployments</strong> → votre déploiement
+      → <strong>Functions</strong> → <span class="highlight">/api/contact</span>.
+    </p>
+  </div>
+
+  <hr class="divider">
+
+  <p style="text-align:center; color:#9ca3af; font-size:11px; margin-top:32px;">
+    Document rédigé par <strong style="color:var(--navy)">Thierry Gravelaine TEMGOUA</strong>, Ingénieur Logiciel<br>
+    MD Transition — Version 1.0 — Avril 2026 — Usage interne
+  </p>
+
+  <div class="doc-footer">
+    <span>MD Transition — Manuel Technique v1.0</span>
+    <span>Thierry Gravelaine TEMGOUA — Ingénieur Logiciel</span>
+  </div>
+</div>
+
+</body>
+</html>
